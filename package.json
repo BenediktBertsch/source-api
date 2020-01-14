@@ -1,0 +1,23 @@
+{
+  "name": "source-docker",
+  "version": "1.0.0",
+  "description": "prometheus source",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --init",
+    "dev": "tsnd --respawn src/index.ts"
+  },
+  "author": "Benedikt Bertsch",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.2",
+    "dgram-as-promised": "^3.0.3",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.6",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.7.4"
+  }
+}
