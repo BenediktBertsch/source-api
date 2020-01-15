@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc --init",
+    "build": "tsc",
     "dev": "tsnd --respawn src/index.ts"
   },
   "author": "Benedikt Bertsch",
