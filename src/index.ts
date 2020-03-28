@@ -16,6 +16,7 @@ app.get("/:ip/:port", function (req, res) {
     sendData(Buffer.from(A2S_INFO), req.params.ip, parseInt(req.params.port)).then(e => {
         var info = parseInfoBuffer(e.buffer);
         res.send(`{
+            "server_status": "1",
             "server_name": "${info.serverName}",
             "server_game": "${info.game}",
             "server_playercount": "${info.playerCount}/${info.maxPlayerCount}",
@@ -29,9 +30,16 @@ app.get("/:ip/:port", function (req, res) {
 app.get("/prometheus/:ip/:port", function (req, res) {
     sendData(Buffer.from(A2S_INFO), req.params.ip, parseInt(req.params.port)).then(e => {
         var info = parseInfoBuffer(e.buffer);
-        var servername = info.serverName.replace(/ /g,"_");
-        res.write(`src_${servername}_players ${info.playerCount}
-src_${servername}_botcount ${info.botCount}`);
+        var servername = info.serverName.replace(/ /g, "_");
+        var notallowedarray = ['[', ']', '{', '}', '.', ',']
+        notallowedarray.forEach((notallowed) => {
+            servername = servername.replace(notallowed, '')
+        })
+        servername = servername.toLowerCase()
+        res.write(`src_${servername}_status 1
+src_${servername}_players ${info.playerCount}
+src_${servername}_botcount ${info.botCount}
+`);
         res.end(``);
     }).catch((e) => {
         res.status(500).send();

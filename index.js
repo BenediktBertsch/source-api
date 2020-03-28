@@ -13,7 +13,7 @@ else {
 app.get("/:ip/:port", function (req, res) {
     sendData(Buffer.from(A2S_INFO), req.params.ip, parseInt(req.params.port)).then(function (e) {
         var info = parseInfoBuffer(e.buffer);
-        res.send("{\n            \"server_name\": \"" + info.serverName + "\",\n            \"server_game\": \"" + info.game + "\",\n            \"server_playercount\": \"" + info.playerCount + "/" + info.maxPlayerCount + "\",\n            \"server_bots\": \"" + info.botCount + "\"\n            }");
+        res.send("{\n            \"server_status\": \"1\",\n            \"server_name\": \"" + info.serverName + "\",\n            \"server_game\": \"" + info.game + "\",\n            \"server_playercount\": \"" + info.playerCount + "/" + info.maxPlayerCount + "\",\n            \"server_bots\": \"" + info.botCount + "\"\n            }");
     }).catch(function (e) {
         res.status(500).send();
     });
@@ -22,7 +22,12 @@ app.get("/prometheus/:ip/:port", function (req, res) {
     sendData(Buffer.from(A2S_INFO), req.params.ip, parseInt(req.params.port)).then(function (e) {
         var info = parseInfoBuffer(e.buffer);
         var servername = info.serverName.replace(/ /g, "_");
-        res.write("src_" + servername + "_players " + info.playerCount + "\nsrc_" + servername + "_botcount " + info.botCount);
+        var notallowedarray = ['[', ']', '{', '}', '.', ','];
+        notallowedarray.forEach(function (notallowed) {
+            servername = servername.replace(notallowed, '');
+        });
+        servername = servername.toLowerCase();
+        res.write("src_" + servername + "_status 1\nsrc_" + servername + "_players " + info.playerCount + "\nsrc_" + servername + "_botcount " + info.botCount + "\n");
         res.end("");
     }).catch(function (e) {
         res.status(500).send();
