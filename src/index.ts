@@ -78,7 +78,7 @@ function sendData(data: Buffer, ip: string, port: number): Promise<ISocketData> 
             });
         });
         socket.on('error', (err) => {
-            console.log(err)
+            throw err
         })
     });
 }

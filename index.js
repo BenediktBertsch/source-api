@@ -63,7 +63,7 @@ function sendData(data, ip, port) {
             });
         });
         socket.on('error', function (err) {
-            console.log(err);
+            throw err;
         });
     });
 }
