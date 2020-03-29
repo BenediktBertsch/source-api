@@ -77,6 +77,9 @@ function sendData(data: Buffer, ip: string, port: number): Promise<ISocketData> 
                 remoteInfo: rinfo
             });
         });
+        socket.on('error', (err) => {
+            console.log(err)
+        })
     });
 }
 

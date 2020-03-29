@@ -62,6 +62,9 @@ function sendData(data, ip, port) {
                 remoteInfo: rinfo
             });
         });
+        socket.on('error', function (err) {
+            console.log(err);
+        });
     });
 }
 function parseInfoBuffer(msg) {
