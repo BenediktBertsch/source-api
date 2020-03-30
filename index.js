@@ -63,7 +63,9 @@ function sendData(data, ip, port) {
             });
         });
         socket.on('error', function (err) {
-            throw err;
+            console.log(err);
+            console.log('Closing socket...');
+            socket.close();
         });
     });
 }
