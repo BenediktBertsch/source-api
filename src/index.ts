@@ -63,7 +63,14 @@ function getSubStr(msg: Buffer) {
 function sendData(data: Buffer, ip: string, port: number): Promise<ISocketData> {
     var socket = createSocket('udp4');
 
-    socket.send(data, port, ip);
+    socket.send(data, port, ip, (err) => {
+        if (err) {
+            socket.close();
+            console.log(err)
+        }else{
+            console.log('Data successfully sent.')
+        }
+    });
 
     return new Promise((resolve, reject) => {
         var wait = setTimeout(() => {
@@ -80,7 +87,7 @@ function sendData(data: Buffer, ip: string, port: number): Promise<ISocketData> 
         socket.on('error', (err) => {
             console.log(err)
             console.log('Closing socket...')
-            socket.close()
+            socket.close();
         })
     });
 }

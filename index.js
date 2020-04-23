@@ -50,7 +50,15 @@ function getSubStr(msg) {
 }
 function sendData(data, ip, port) {
     var socket = dgram_1.createSocket('udp4');
-    socket.send(data, port, ip);
+    socket.send(data, port, ip, function (err) {
+        if (err) {
+            socket.close();
+            console.log(err);
+        }
+        else {
+            console.log('Data successfully sent.');
+        }
+    });
     return new Promise(function (resolve, reject) {
         var wait = setTimeout(function () {
             reject();
