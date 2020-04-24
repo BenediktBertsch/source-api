@@ -50,15 +50,11 @@ function getSubStr(msg) {
 }
 function sendData(data, ip, port) {
     var socket = dgram_1.createSocket('udp4');
-    socket.on('listening', function () {
-        socket.send(data, port, ip, function (err) {
-            var adrInfo = socket.address();
-            console.log("Client listening on " + adrInfo.address + ":" + adrInfo.port);
-            if (err) {
-                socket.close();
-                console.log(err);
-            }
-        });
+    socket.send(data, port, ip, function (err) {
+        if (err) {
+            socket.close();
+            console.log(err);
+        }
     });
     return new Promise(function (resolve, reject) {
         var wait = setTimeout(function () {
@@ -75,6 +71,7 @@ function sendData(data, ip, port) {
                 buffer: msg,
                 remoteInfo: rinfo
             });
+            socket.close();
         });
     });
 }

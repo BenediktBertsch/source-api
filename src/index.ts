@@ -62,17 +62,12 @@ function getSubStr(msg: Buffer) {
 
 function sendData(data: Buffer, ip: string, port: number): Promise<ISocketData> {
     var socket = createSocket('udp4');
-
-    socket.on('listening', () => {
         socket.send(data, port, ip, (err) => {
-            var adrInfo = socket.address();
-            console.log("Client listening on " + adrInfo.address + ":" + adrInfo.port);
             if (err) {
                 socket.close();
                 console.log(err)
             }
         });
-    });
 
     return new Promise((resolve, reject) => {
         var wait = setTimeout(() => {
@@ -91,6 +86,7 @@ function sendData(data: Buffer, ip: string, port: number): Promise<ISocketData> 
                 buffer: msg,
                 remoteInfo: rinfo
             });
+            socket.close();
         });
     })
 }
