@@ -50,30 +50,31 @@ function getSubStr(msg) {
 }
 function sendData(data, ip, port) {
     var socket = dgram_1.createSocket('udp4');
-    socket.send(data, port, ip, function (err) {
-        if (err) {
-            socket.close();
-            console.log(err);
-        }
-        else {
-            console.log('Data successfully sent.');
-        }
+    socket.on('listening', function () {
+        socket.send(data, port, ip, function (err) {
+            var adrInfo = socket.address();
+            console.log("Client listening on " + adrInfo.address + ":" + adrInfo.port);
+            if (err) {
+                socket.close();
+                console.log(err);
+            }
+        });
     });
     return new Promise(function (resolve, reject) {
         var wait = setTimeout(function () {
             reject();
         }, 300);
+        socket.on('error', function (err) {
+            console.log(err);
+            console.log('Closing socket...');
+            socket.close();
+        });
         socket.on('message', function (msg, rinfo) {
             clearTimeout(wait);
             resolve({
                 buffer: msg,
                 remoteInfo: rinfo
             });
-        });
-        socket.on('error', function (err) {
-            console.log(err);
-            console.log('Closing socket...');
-            socket.close();
         });
     });
 }
